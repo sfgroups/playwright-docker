@@ -1,0 +1,12 @@
+{
+  "name": "playwright-docker-ssl",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "npx playwright test",
+    "show-trace": "npx playwright show-trace playwright-report/trace.zip --port 9323 --host 0.0.0.0",
+    "show-report": "npx playwright show-report --port 9322 --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}
