@@ -1,0 +1,17 @@
+FROM mcr.microsoft.com/playwright:v1.63.0-noble
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY playwright.config.js ./
+COPY tests ./tests
+COPY scripts ./scripts
+
+ENV TZ=America/New_York
+ENV RESULTS_ROOT=/test-results
+
+RUN npx playwright install --with-deps chromium
+
+CMD ["node", "scripts/run-tests.js"]

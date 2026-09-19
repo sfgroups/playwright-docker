@@ -1,22 +1,26 @@
 services:
-  playwright:
-    build: .
-    container_name: playwright_e2e
-    ipc: host
+  playwright-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.playwright
+    container_name: playwright-daily-runner
+    environment:
+      TZ: ${TZ:-America/New_York}
+      RESULTS_ROOT: /test-results
     volumes:
-      - .:/app
-      - /app/node_modules
-    tty: true
+      - ./test-results:/test-results
 
-  nginx:
-    image: nginx:alpine
-    container_name: playwright_nginx
-    ports:
-      - "443:443"  # Secure Trace Viewer
-      - "444:444"  # Secure HTML Report
-      - "9322:9322" # 👈 Add this line to expose direct HTTP reports
+  report-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: playwright-report-server
+    environment:
+      TZ: ${TZ:-America/New_York}
+      RESULTS_ROOT: /test-results
+      PORT: 3000
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/certs:/etc/nginx/certs:ro
-    depends_on:
-      - playwright
+      - ./test-results:/test-results:ro
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
