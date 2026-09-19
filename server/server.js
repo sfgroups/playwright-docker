@@ -108,14 +108,13 @@ app.get('/api/report/:year/:month/:day', (req, res) => {
 
   const metadata = readJson(path.join(dir, 'metadata.json'), {});
   const relativeBase = `/reports/${year}/${pad(month)}/${pad(day)}`;
+  
   const traceFile = findTraceFiles(path.join(dir, 'artifacts'))[0];
   const traceUrl = traceFile
-    ? `${relativeBase}/artifacts/${path.relative(path.join(dir, 'artifacts'), traceFile).replace(/\\/g, '/')}`
-    : null;
-  const host = req.get('host') || 'localhost:3000';
-  const protocol = req.protocol || 'http';
-  const traceViewerUrl = traceUrl
-    ? `https://trace.playwright.dev/?trace=${encodeURIComponent(`${protocol}://${host}${traceUrl}`)}`
+    ? `${relativeBase}/artifacts/${path.relative(
+        path.join(dir, 'artifacts'),
+        traceFile
+      ).replace(/\\/g, '/')}`
     : null;
 
   res.json({
@@ -123,9 +122,9 @@ app.get('/api/report/:year/:month/:day', (req, res) => {
     reportUrl: `${relativeBase}/report/index.html`,
     resultsUrl: `${relativeBase}/results.json`,
     artifactsUrl: `${relativeBase}/artifacts/`,
-    traceUrl,
-    traceViewerUrl
+    traceUrl
   });
+  
 });
 
 app.use('/reports', express.static(RESULTS_ROOT));

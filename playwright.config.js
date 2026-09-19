@@ -36,7 +36,7 @@ module.exports = defineConfig({
   use: {
     baseURL: process.env.BASE_URL || 'https://example.com',
     trace: 'on',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure'
+    screenshot: 'on',
+    video: 'on'
   }
 });
