@@ -19,8 +19,8 @@ services:
       TZ: ${TZ:-America/New_York}
       RESULTS_ROOT: /test-results
       PORT: 3000
-    expose:
-      - "3000"
+    # expose:
+    #   - "3000"
     ipc: host
     volumes:
       - ./test-results:/test-results:ro
@@ -34,7 +34,9 @@ services:
       - report-server
     ports:
       - "8080:80"
+      - "8443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
       - ./test-results:/test-results:ro
     restart: unless-stopped
