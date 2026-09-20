@@ -19,8 +19,22 @@ services:
       TZ: ${TZ:-America/New_York}
       RESULTS_ROOT: /test-results
       PORT: 3000
+    expose:
+      - "3000"
+    ipc: host
     volumes:
       - ./test-results:/test-results:ro
     ports:
       - "3000:3000"
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    depends_on:
+      - report-server
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./test-results:/test-results:ro
     restart: unless-stopped

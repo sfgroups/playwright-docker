@@ -94,10 +94,9 @@ function renderCalendar() {
   return html;
 }
 
-
 function renderDetail() {
   if (!state.selected) {
-    return `<div class="empty-state"><p>Select a date from the calendar to inspect the test run.</p></div>`;
+    return `<div class="empty-state"><p>Select a date to view test run details.</p></div>`;
   }
 
   if (!state.detail) {
@@ -109,9 +108,11 @@ function renderDetail() {
 
   return `
     <h3>Report: ${state.selected}</h3>
-    <p style="margin-top: 4px; color: var(--text-muted); font-size: 0.85rem;">
-      Status: <span class="badge ${metadata.status || 'none'}" style="display:inline-flex; width:auto; padding:2px 8px;">${metadata.status || 'unknown'}</span>
-    </p>
+    <div style="margin-top: 6px;">
+      <span class="badge ${metadata.status || 'none'}" style="display:inline-flex; width:auto; padding:3px 8px;">
+        ${metadata.status || 'unknown'}
+      </span>
+    </div>
 
     <div class="stats-grid">
       <div class="stat-card"><span>Total Tests</span><strong>${metadata.total || 0}</strong></div>
@@ -126,13 +127,12 @@ function renderDetail() {
       </div>` : ''}
 
     <div class="links-group">
-      ${state.detail.reportUrl ? `<a target="_blank" href="${state.detail.reportUrl}">↗ Open Full HTML Report</a>` : ''}
+      ${state.detail.reportUrl ? `<a target="_blank" href="${state.detail.reportUrl}">↗ Open HTML Report</a>` : ''}
       ${state.detail.traceViewerUrl ? `<a target="_blank" href="${state.detail.traceViewerUrl}">↗ Open Trace Viewer</a>` : ''}
       ${state.detail.artifactsUrl ? `<a target="_blank" href="${state.detail.artifactsUrl}">↗ View Artifacts</a>` : ''}
     </div>
   `;
 }
-
 
 function renderTraceLink(traceUrl) {
   if (!traceUrl) {
@@ -149,11 +149,14 @@ function renderTraceLink(traceUrl) {
   `;
 }
 
+
+
+
 function render() {
   app.innerHTML = `
     <main class="container">
       <div class="header">
-        <h1>Playwright Execution Calendar</h1>
+        <h1>Playwright Daily Reports</h1>
         <div class="controls">
           <button id="previous">‹ Prev</button>
           <button id="today">Today</button>
@@ -174,14 +177,13 @@ function render() {
         </section>
 
         <section class="detail">
-          ${state.error ? `<p class="error" style="color:var(--status-failed); margin-bottom:1rem;">${state.error}</p>` : ''}
+          ${state.error ? `<p style="color:var(--status-failed); margin-bottom:1rem; font-size:0.85rem;">${state.error}</p>` : ''}
           ${renderDetail()}
         </section>
       </div>
     </main>
   `;
 
-  // Attach Navigation Listeners
   document.getElementById('previous').onclick = () => {
     state.current = new Date(state.current.getFullYear(), state.current.getMonth() - 1, 1);
     state.selected = null; state.detail = null; loadMonth();
@@ -201,4 +203,7 @@ function render() {
     button.onclick = () => loadDetail(button.dataset.date);
   });
 }
+
+
+
 loadMonth();
