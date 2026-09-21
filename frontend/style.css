@@ -1,0 +1,312 @@
+:root {
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --border-color: #e2e8f0;
+  --border-color-strong: #cbd5e1;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --accent-color: #2563eb;
+  --accent-glow: rgba(37, 99, 235, 0.15);
+
+  --status-passed: #15803d;
+  --status-passed-bg: #f0fdf4;
+  --status-passed-border: #bbf7d0;
+
+  --status-failed: #b91c1c;
+  --status-failed-bg: #fef2f2;
+  --status-failed-border: #fecaca;
+
+  --status-skipped: #b45309;
+  --status-skipped-bg: #fffbeb;
+  --status-skipped-border: #fef3c7;
+
+  --status-none: #64748b;
+  --status-none-bg: #f8fafc;
+  --status-none-border: #e2e8f0;
+
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  padding: 2.5rem 1.5rem;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header & Controls */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.controls {
+  display: flex;
+  gap: 0.25rem;
+  background: #ffffff;
+  padding: 3px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.controls button {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.controls button:hover {
+  color: var(--text-main);
+  background: var(--bg-card-hover);
+}
+
+.controls button#today {
+  background: var(--accent-color);
+  color: #ffffff;
+}
+
+/* Dashboard Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+}
+
+.calendar, .detail {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.calendar-header h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.day.empty {
+  aspect-ratio: 1;
+  background: transparent;
+}
+
+/* Day Cards */
+.day-btn {
+  aspect-ratio: 1;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: var(--text-main);
+}
+
+.day-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-color-strong);
+  transform: translateY(-1px);
+}
+
+.day-btn.selected {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+  background: #eff6ff;
+}
+
+.day-btn .number {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-main);
+}
+
+/* Minimal Status Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  text-transform: capitalize;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.badge::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.badge.passed { 
+  background: var(--status-passed-bg); 
+  color: var(--status-passed); 
+  border-color: var(--status-passed-border); 
+}
+.badge.passed::before { background: var(--status-passed); }
+
+.badge.failed { 
+  background: var(--status-failed-bg); 
+  color: var(--status-failed); 
+  border-color: var(--status-failed-border); 
+}
+.badge.failed::before { background: var(--status-failed); }
+
+.badge.skipped { 
+  background: var(--status-skipped-bg); 
+  color: var(--status-skipped); 
+  border-color: var(--status-skipped-border); 
+}
+.badge.skipped::before { background: var(--status-skipped); }
+
+.badge.unknown, .badge.none { 
+  background: var(--status-none-bg); 
+  color: var(--text-muted); 
+  border-color: var(--status-none-border); 
+}
+.badge.unknown::before, .badge.none::before { background: var(--text-muted); }
+
+/* Details Panel */
+.detail h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.stat-card {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-card span {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.stat-card strong {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 2px;
+  color: var(--text-main);
+}
+
+.preview-box {
+  width: 100%;
+  height: 180px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  background: #f1f5f9;
+}
+
+.preview-box iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.links-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.links-group a {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.links-group a:hover {
+  text-decoration: underline;
+}
+
+.empty-state {
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
